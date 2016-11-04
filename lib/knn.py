@@ -62,8 +62,6 @@ class KNN(object):
 	    labels.append(self.classify(fields))
 	return labels
 
-    def classify_file(self, file_path):
-	pass
 
     def test_knn(self, file_path, sep):
 	matrix_labels, matrix = [], []
