@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # -*-coding:utf-8-*-
 
+import sys
+
 class KNN(object):
     def __init__(self, k, matrix=None, matrix_labels=None, min_maxs=None):
 	self.matrix = matrix
@@ -36,7 +38,7 @@ class KNN(object):
 	for i in xrange(len(fields_a)):
 	    val = fields_a[i] - fields_b[i]
 	    ret += (val * val)
-	    return ret
+	return ret
 
     def classify(self, fields):
 	distance_labels = []
@@ -62,18 +64,7 @@ class KNN(object):
 	    labels.append(self.classify(fields))
 	return labels
 
-
-    def test_knn(self, file_path, sep):
-	matrix_labels, matrix = [], []
-	with open(file_path, "r") as f:
-	    while True:
-		line = f.readline()
-		if not line:
-		    break
-		fields = line.strip().split(sep)
-		matrix_labels.append(fields[-1])
-		matrix.append(self.auto_normal_fields([float(field) for field in fields[0:len(fields)-1]]))
-
+    def test_knn_from_data(self, matrix, matrix_labels):
 	new_matrix_labels = self.multiple_classify(matrix)
 	success_samples, failed_samples = 0, 0
 	for i in xrange(len(matrix_labels)):
@@ -83,11 +74,23 @@ class KNN(object):
 		failed_samples += 1
 	print "success:%0.2f%%, failed:%0.2f%%" % (success_samples * 100.0 / len(matrix_labels), failed_samples * 100.0 / len(matrix_labels))
 
+    def test_knn_from_file(self, file_path, sep):
+	matrix_labels, matrix = [], []
+	with open(file_path, "r") as f:
+	    while True:
+		line = f.readline()
+		if not line:
+		    break
+		fields = line.strip().split(sep)
+		matrix_labels.append(fields[-1])
+		matrix.append(self.auto_normal_fields([float(field) for field in fields[0:len(fields)-1]]))
+        self.test_knn_from_data(matrix, matrix_labels)
+
 def main():
     knn = KNN(3)
     cur_dir = os.path.split(os.path.realpath(__file__))[0]
     knn.load("%s/../data/iris/iris.data" % (cur_dir), ",", [[4,8],[2,5],[1,7],[0,3]])
-    knn.test_knn("%s/../data/iris/bezdekIris.data" % (cur_dir), ",")
+    knn.test_knn_from_file("%s/../data/iris/bezdekIris.data" % (cur_dir), ",")
 
 if __name__ == "__main__":
     import sys
