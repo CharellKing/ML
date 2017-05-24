@@ -7,6 +7,7 @@ cur_dir = os.path.split(os.path.realpath(__file__))[0]
 sys.path.insert(0, "%s/../../lib/" % (cur_dir))
 from knn import KNN
 
+
 def number_to_files(data_dir):
     number_paths = []
     for file_name in os.listdir(data_dir):
@@ -14,6 +15,7 @@ def number_to_files(data_dir):
         path = "%s/%s" % (data_dir, file_name)
         number_paths.append([number, path])
     return number_paths
+
 
 def get_fields(file_path):
     with open(file_path, "r") as f:
@@ -25,6 +27,7 @@ def get_fields(file_path):
             fields.extend([int(ch) for ch in list(line.strip())])
     return fields
 
+
 def get_matrix_labels(data_dir):
     matrix, labels = [], []
     number_paths = number_to_files(data_dir)
@@ -32,6 +35,7 @@ def get_matrix_labels(data_dir):
         matrix.append(get_fields(file_path))
         labels.append(number)
     return matrix, labels
+
 
 def main():
     training_dir = os.path.realpath("%s/../../data/digits/trainingDigits/" % (cur_dir))
